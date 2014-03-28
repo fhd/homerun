@@ -10,7 +10,7 @@ from homerun import storage
 def print_house(data):
     print data["title"].encode("utf-8")
     print data["url"].encode("utf-8")
-    print "Rent: %.2f€" % data["rent"]
+    print "Price: %.2f€" % data["price"]
     print "Rooms: %.2f" % data["rooms"]
     print "Living area: %.2fm²" % data["living_area"]
     if data["plot_area"] != 0:
@@ -24,7 +24,7 @@ def print_houses(houses):
 
 if __name__ == "__main__":
     houses = storage.load_houses()
-    houses = sorted(houses, key=lambda key: key["rent"])
+    houses = sorted(houses, key=lambda key: key["price"])
 
     old_houses = filter(lambda house: "printed" in house, houses)
     new_houses = filter(lambda house: not "printed" in house, houses)
