@@ -16,7 +16,7 @@ def _get_house(url):
     data["rooms"] = _get_number_attribute(soup, "is24qa-zimmer")
     data["living_area"] = _get_number_attribute(soup, "is24qa-wohnflaeche-ca")
     data["plot_area"] = _get_number_attribute(soup,
-                                             "is24qa-grundstuecksflaeche-ca")
+                                              "is24qa-grundstuecksflaeche-ca")
     return data
 
 def _get_houses(search_url):
