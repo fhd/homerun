@@ -17,10 +17,10 @@ def _get_house(url):
                                              "is24qa-grundstuecksflaeche-ca")
     return data
 
-def get_houses(min_rooms, max_price):
-    url_template = "%s/Suche/S-T/Haus-Kauf/Nordrhein-Westfalen/Rheinisch-Bergischer-Kreis/Bergisch-Gladbach/%d,00-/-/EURO--%d,00?enteredFrom=one_step_search"
+def get_houses():
+    search_url = "/Suche/S-T/Haus-Kauf/Nordrhein-Westfalen/Rheinisch-Bergischer-Kreis/Bergisch-Gladbach"
     base_url = "http://www.immobilienscout24.de"
-    url = url_template % (base_url, min_rooms, max_price)
+    url = base_url + search_url
     soup = BeautifulSoup(urllib2.urlopen(url).read())
     items = soup.findAll(id="resultListItems")[0].findAll("li", recursive=False)
     houses = []

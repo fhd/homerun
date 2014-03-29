@@ -8,7 +8,7 @@ from homerun import spiders, storage, house_utils
 
 if __name__ == "__main__":
     stored_houses = storage.load_houses()
-    houses = spiders.get_houses(min_rooms=3, max_price=350000)
+    houses = spiders.get_houses()
     for house in houses:
         if not house_utils.contains(stored_houses, house):
             stored_houses.append(house)

@@ -31,10 +31,10 @@ def _get_house(url):
     data["plot_area"] = _get_number_attribute(content, r"Grundst.ck")
     return data
 
-def get_houses(min_rooms, max_price):
-    url_template = "%s/immobilien/haus-kaufen/o/rheinisch-bergischer-kreis/bergisch-gladbach/?ROOMS_FROM=%d&PRICE_TO=%d"
+def get_houses():
+    search_url = "/immobilien/haus-kaufen/o/rheinisch-bergischer-kreis/bergisch-gladbach"
     base_url = "http://www.kalaydo.de"
-    url = url_template % (base_url, min_rooms, max_price)
+    url = base_url + search_url
     soup = BeautifulSoup(urllib2.urlopen(url).read())
     items = soup.findAll(id="resultlist")[0].findAll("li", recursive=False)
     houses = []
