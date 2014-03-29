@@ -31,8 +31,7 @@ def _get_house(url):
     data["plot_area"] = _get_number_attribute(content, r"Grundst.ck")
     return data
 
-def get_houses():
-    search_url = "/immobilien/haus-kaufen/o/rheinisch-bergischer-kreis/bergisch-gladbach"
+def _get_houses(search_url):
     base_url = "http://www.kalaydo.de"
     url = base_url + search_url
     soup = BeautifulSoup(urllib2.urlopen(url).read())
@@ -44,4 +43,11 @@ def get_houses():
         data = _get_house(target)
         data["url"] = target
         houses.append(data)
+    next_link = soup.find("a", attrs={"class": "next"})
+    if next_link:
+        houses.extend(_get_houses(next_link["href"]))
     return houses
+
+def get_houses():
+    search_url = "/immobilien/haus-kaufen/o/rheinisch-bergischer-kreis/bergisch-gladbach"
+    return _get_houses(search_url)

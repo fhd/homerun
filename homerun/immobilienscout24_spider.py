@@ -3,8 +3,10 @@ import urllib2
 from BeautifulSoup import BeautifulSoup
 
 def _get_number_attribute(soup, class_name):
-    attribute = soup.findAll(attrs={"class": class_name})[0].string
-    return float(attribute.split()[0].replace(",", ""))
+    attribute = soup.find(attrs={"class": class_name})
+    if not attribute:
+        return 0
+    return float(attribute.string.split()[0].replace(",", ""))
 
 def _get_house(url):
     data = {}
@@ -17,8 +19,7 @@ def _get_house(url):
                                              "is24qa-grundstuecksflaeche-ca")
     return data
 
-def get_houses():
-    search_url = "/Suche/S-T/Haus-Kauf/Nordrhein-Westfalen/Rheinisch-Bergischer-Kreis/Bergisch-Gladbach"
+def _get_houses(search_url):
     base_url = "http://www.immobilienscout24.de"
     url = base_url + search_url
     soup = BeautifulSoup(urllib2.urlopen(url).read())
@@ -32,4 +33,11 @@ def get_houses():
         data = _get_house(target)
         data["url"] = target
         houses.append(data)
+    next_link = soup.find("a", attrs={"data-is24-qa": "paging_bottom_next"})
+    if next_link:
+        houses.extend(_get_houses(next_link["href"]))
     return houses
+
+def get_houses():
+    search_url = "/Suche/S-T/Haus-Kauf/Nordrhein-Westfalen/Rheinisch-Bergischer-Kreis/Bergisch-Gladbach"
+    return _get_houses(search_url)
