@@ -11,7 +11,7 @@ def _get_number_attribute(soup, class_name):
 def _get_house(url):
     data = {}
     soup = BeautifulSoup(urllib2.urlopen(url).read())
-    data["title"] = soup.findAll(id="expose-title")[0].string
+    data["title"] = soup.find(id="expose-title").string
     data["price"] = _get_number_attribute(soup, "is24qa-kaufpreis")
     data["rooms"] = _get_number_attribute(soup, "is24qa-zimmer")
     data["living_area"] = _get_number_attribute(soup, "is24qa-wohnflaeche-ca")
@@ -23,7 +23,7 @@ def _get_houses(search_url):
     base_url = "http://www.immobilienscout24.de"
     url = base_url + search_url
     soup = BeautifulSoup(urllib2.urlopen(url).read())
-    items = soup.findAll(id="resultListItems")[0].findAll("li", recursive=False)
+    items = soup.find(id="resultListItems").findAll("li", recursive=False)
     houses = []
     for item in items:
         links = item.findAll("a", href=re.compile(r"^/expose/"))

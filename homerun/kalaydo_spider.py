@@ -35,10 +35,10 @@ def _get_houses(search_url):
     base_url = "http://www.kalaydo.de"
     url = base_url + search_url
     soup = BeautifulSoup(urllib2.urlopen(url).read())
-    items = soup.findAll(id="resultlist")[0].findAll("li", recursive=False)
+    items = soup.find(id="resultlist").findAll("li", recursive=False)
     houses = []
     for item in items:
-        link = item.findAll("a", href=re.compile(r"^/immobilien/"))[0]
+        link = item.find("a", href=re.compile(r"^/immobilien/"))
         target = base_url + link["href"]
         data = _get_house(target)
         data["url"] = target
