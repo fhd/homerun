@@ -4,23 +4,31 @@ import re
 import urllib2
 from BeautifulSoup import BeautifulSoup
 
-def _get_number_attribute(soup, label_text):
-    labels = soup.findAll(text=re.compile(r"^" + label_text))
-    if len(labels) == 0:
+def _get_number_attribute(content, label_text):
+    # No BeautifulSoup parser can handle the kalaydo.de detail pages properly,
+    # resorting to regex.
+    pattern = label_text + r".*?<div.*?>(.*?)<"
+    match = re.search(pattern, content, re.DOTALL)
+    if not match:
         return 0
-    label = labels[0]
-    value = label.parent.findNextSibling("div")
-    number_strings = re.findall(r"[\d,]+", value.string)
-    return float(number_strings[0].replace(",", "."))
+    value = match.groups()[0].strip()
+    match = re.search(r"([\d,\.]+)", value)
+    if not match:
+        return 0
+    number_string = match.group(0).replace(".", "").replace(",", ".")
+    try:
+        return float(number_string)
+    except:
+        return 0
 
 def _get_house(url):
     data = {}
-    soup = BeautifulSoup(urllib2.urlopen(url).read())
-    data["title"] = soup.findAll("h1")[0].string
-    data["price"] = _get_number_attribute(soup, "Kaufpreis")
-    data["rooms"] = _get_number_attribute(soup, "Zimmer")
-    data["living_area"] = _get_number_attribute(soup, r"Wohnfl.che")
-    data["plot_area"] = _get_number_attribute(soup, r"Gesamtfl.che")
+    content = urllib2.urlopen(url).read()
+    data["title"] = BeautifulSoup(content).find("h1").string
+    data["price"] = _get_number_attribute(content, "Kaufpreis")
+    data["rooms"] = _get_number_attribute(content, "Zimmer")
+    data["living_area"] = _get_number_attribute(content, r"Wohnfl.che")
+    data["plot_area"] = _get_number_attribute(content, r"Grundst.ck")
     return data
 
 def get_houses(min_rooms, max_price):
