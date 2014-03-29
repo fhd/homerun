@@ -9,7 +9,14 @@ from homerun import spiders, storage, house_utils
 if __name__ == "__main__":
     stored_houses = storage.load_houses()
     houses = spiders.get_houses()
+    anything_new = False
     for house in houses:
         if not house_utils.contains(stored_houses, house):
-            stored_houses.append(house)
-    storage.save_houses(stored_houses)
+	   house["new"] = True
+           anything_new = True
+    storage.save_houses(houses)
+    if anything_new:
+        print "New houses!"
+    else:
+        print "No new houses"
+        sys.exit(1)

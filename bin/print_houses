@@ -26,11 +26,8 @@ if __name__ == "__main__":
     houses = storage.load_houses()
     houses = sorted(houses, key=lambda key: key["price"])
 
-    old_houses = filter(lambda house: "printed" in house, houses)
-    new_houses = filter(lambda house: not "printed" in house, houses)
-    for house in new_houses:
-        house["printed"] = True
-    storage.save_houses(houses)
+    old_houses = filter(lambda house: "new" in house, houses)
+    new_houses = filter(lambda house: not "new" in house, houses)
 
     print_houses(old_houses)
     if len(old_houses) > 0:
