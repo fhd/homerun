@@ -2,6 +2,11 @@ import re
 import urllib2
 from BeautifulSoup import BeautifulSoup
 
+def _get_address(soup):
+    address_field = soup.find(attrs={"class": re.compile(r"is24-ex-address")})
+    address_value = address_field.find("strong").string
+    return re.sub("\s+", " ", address_value.strip())
+
 def _get_number_attribute(soup, class_name):
     attribute = soup.find(attrs={"class": class_name})
     if not attribute:
@@ -12,6 +17,7 @@ def _get_house(url):
     data = {}
     soup = BeautifulSoup(urllib2.urlopen(url).read())
     data["title"] = soup.find(id="expose-title").string
+    data["address"] = _get_address(soup)
     data["price"] = _get_number_attribute(soup, "is24qa-kaufpreis")
     data["rooms"] = _get_number_attribute(soup, "is24qa-zimmer")
     data["living_area"] = _get_number_attribute(soup, "is24qa-wohnflaeche-ca")

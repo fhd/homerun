@@ -4,6 +4,13 @@ import re
 import urllib2
 from BeautifulSoup import BeautifulSoup
 
+def _get_address(soup):
+    postal_code = soup.find(attrs={"itemprop": "postalCode"}).string.strip()
+    city = soup.find(attrs={"itemprop": "addressLocality"}).string.strip()
+    address = postal_code + " " + city
+    address = re.sub(",$", "", address)
+    return address
+
 def _get_number_attribute(content, label_text):
     # No BeautifulSoup parser can handle the kalaydo.de detail pages properly,
     # resorting to regex.
@@ -24,7 +31,9 @@ def _get_number_attribute(content, label_text):
 def _get_house(url):
     data = {}
     content = urllib2.urlopen(url).read()
-    data["title"] = BeautifulSoup(content).find("h1").string
+    soup = BeautifulSoup(content)
+    data["title"] = soup.find("h1").string
+    data["address"] = _get_address(soup)
     data["price"] = _get_number_attribute(content, "Kaufpreis")
     data["rooms"] = _get_number_attribute(content, "Zimmer")
     data["living_area"] = _get_number_attribute(content, r"Wohnfl.che")

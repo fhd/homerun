@@ -11,6 +11,8 @@ def print_house(data):
     print data["title"].encode("utf-8")
     print data["url"].encode("utf-8")
     print "Price: %.2f€" % data["price"]
+    if data["address"]:
+        print "Address: %s" % data["address"]
     if data["rooms"] != 0:
         print "Rooms: %.2f" % data["rooms"]
     if data["living_area"] != 0:
