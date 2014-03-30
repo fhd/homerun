@@ -1,0 +1,29 @@
+#!/usr/bin/env python
+# coding=utf-8
+
+import os
+import smtplib
+import subprocess
+import sys
+
+from email.mime.text import MIMEText
+
+if __name__ == "__main__":
+    if len(sys.argv) < 4:
+        base_name = os.path.basename(sys.argv[0])
+        print "Usage: %s SUBJECT SENDER RECIPIENT..." % base_name
+        sys.exit(1)
+
+    subject = sys.argv[1]
+    sender = sys.argv[2]
+    recipients = sys.argv[3:]
+
+    bin_dir = os.path.dirname(os.path.realpath(__file__))
+    output = subprocess.check_output([os.path.join(bin_dir, "print_houses")])
+    message = MIMEText(output, "plain", "utf-8")
+    message["Subject"] = subject
+    message["From"] = sender
+    message["To"] = ", ".join(recipients)
+    smtp = smtplib.SMTP('localhost')
+    smtp.sendmail(sender, recipients, message.as_string())
+    smtp.quit()

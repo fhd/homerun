@@ -11,8 +11,10 @@ def print_house(data):
     print data["title"].encode("utf-8")
     print data["url"].encode("utf-8")
     print "Price: %.2f€" % data["price"]
-    print "Rooms: %.2f" % data["rooms"]
-    print "Living area: %.2fm²" % data["living_area"]
+    if data["rooms"] != 0:
+        print "Rooms: %.2f" % data["rooms"]
+    if data["living_area"] != 0:
+        print "Living area: %.2fm²" % data["living_area"]
     if data["plot_area"] != 0:
         print "Plot area: %.2fm²" % data["plot_area"]
 
@@ -26,12 +28,18 @@ if __name__ == "__main__":
     houses = storage.load_houses()
     houses = sorted(houses, key=lambda key: key["price"])
 
-    old_houses = filter(lambda house: "new" in house, houses)
-    new_houses = filter(lambda house: not "new" in house, houses)
+    new_houses = filter(lambda house: "new" in house, houses)
+    old_houses = filter(lambda house: not "new" in house, houses)
+    has_new_houses = len(new_houses) > 0
+    has_old_houses = len(old_houses) > 0
 
-    print_houses(old_houses)
-    if len(old_houses) > 0:
+    if has_new_houses:
+        print "New houses:"
         print
-    print "New:"
-    print
-    print_houses(new_houses)
+        print_houses(new_houses)
+        if has_old_houses:
+            print
+    if has_old_houses:
+        print "Old houses:"
+        print
+        print_houses(old_houses)
