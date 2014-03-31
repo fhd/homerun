@@ -44,6 +44,5 @@ def _get_houses(search_url):
         houses.extend(_get_houses(next_link["href"]))
     return houses
 
-def get_houses():
-    search_url = "/Suche/S-T/Haus-Kauf/Nordrhein-Westfalen/Rheinisch-Bergischer-Kreis/Bergisch-Gladbach"
+def get_houses(search_url):
     return _get_houses(search_url)

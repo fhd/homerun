@@ -12,8 +12,18 @@ Dependencies
 Fetching houses
 ---------------
 
-The following command will crawl real estate sites and store all the
-houses it finds in _houses.json_:
+First you'll have to configure what spiders to use, and what search
+URL to use for each, in a file called _spiders.json_. This should get you started:
+
+    cp spiders.sample.json spiders.json
+
+Note that the default search URLs look for houses in Bergisch Gladbach, Germany.
+This might not be what you want, and you might want to add price and size
+restrictions.
+
+With _spiders.json_ in place, the following command will invoke the configured
+spiders to crawl real estate sites. The houses it finds are stored in
+_houses.json_:
 
     bin/fetch_houses
 

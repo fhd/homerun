@@ -57,6 +57,5 @@ def _get_houses(search_url):
         houses.extend(_get_houses(next_link["href"]))
     return houses
 
-def get_houses():
-    search_url = "/immobilien/haus-kaufen/o/rheinisch-bergischer-kreis/bergisch-gladbach"
+def get_houses(search_url):
     return _get_houses(search_url)

@@ -1,2 +1,3 @@
 *.pyc
 /houses.json
+/spiders.json
