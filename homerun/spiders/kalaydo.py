@@ -1,5 +1,3 @@
-# coding=utf-8
-
 import re
 import urllib2
 from BeautifulSoup import BeautifulSoup
