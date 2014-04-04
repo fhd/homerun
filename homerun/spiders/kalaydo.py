@@ -3,9 +3,10 @@ import urllib2
 from BeautifulSoup import BeautifulSoup
 
 def _get_address(soup):
-    postal_code = soup.find(attrs={"itemprop": "postalCode"}).string.strip()
+    postal_code_field = soup.find(attrs={"itemprop": "postalCode"})
+    postal_code = postal_code_field and postal_code_field.string.strip() or ""
     city = soup.find(attrs={"itemprop": "addressLocality"}).string.strip()
-    address = postal_code + " " + city
+    address = postal_code and postal_code + " " + city or city
     address = re.sub(",$", "", address)
     return address
 
