@@ -3,7 +3,8 @@ import urllib2
 from BeautifulSoup import BeautifulSoup
 
 def _get_address(soup):
-    address_field = soup.find(attrs={"class": re.compile(r"is24-ex-address")})
+    address_pattern = re.compile(r"is24-expose-address")
+    address_field = soup.find(attrs={"data-qa": address_pattern})
     address_value = address_field.find("strong").string
     return re.sub("\s+", " ", address_value.strip())
 
