@@ -42,13 +42,22 @@ def _get_house(url):
 def _get_houses(search_url):
     base_url = "http://www.kalaydo.de"
     url = base_url + search_url
-    soup = BeautifulSoup(urllib2.urlopen(url).read())
+    try:
+        soup = BeautifulSoup(urllib2.urlopen(url).read())
+    except urllib2.HTTPError as e:
+        if e.code == 509:
+            print "Ignoring HTTP 509 for: " + url
+            return []
     items = soup.find(id="resultlist").findAll("li", recursive=False)
     houses = []
     for item in items:
         link = item.find("a", href=re.compile(r"^/immobilien/"))
         target = base_url + link["href"]
-        data = _get_house(target)
+        try:
+            data = _get_house(target)
+        except urllib2.HTTPError as e:
+            print "Ignoring HTTP 509 for: " + target
+            continue
         data["url"] = target
         houses.append(data)
     next_link = soup.find("a", attrs={"class": "next"})
