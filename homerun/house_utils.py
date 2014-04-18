@@ -1,6 +1,8 @@
 def _equals(house1, house2):
     unique_keys = ["title", "price"]
     for unique_key in unique_keys:
+        if not unique_key in house1 or not unique_key in house2:
+            return False
         if house1[unique_key] != house2[unique_key]:
             return False
     return True

@@ -1,6 +1,22 @@
+import sys
 import re
 import urllib2
 from BeautifulSoup import BeautifulSoup
+
+def _get_house_urls(search_url):
+    base_url = "http://www.kalaydo.de"
+    url = base_url + search_url
+    soup = BeautifulSoup(urllib2.urlopen(url).read())
+    items = soup.find(id="resultlist").findAll("li", recursive=False)
+    urls = []
+    for item in items:
+        link = item.find("a", href=re.compile(r"^/immobilien/"))
+        target = base_url + link["href"]
+        urls.append(target)
+    next_link = soup.find("a", attrs={"class": "next"})
+    if next_link:
+        urls.extend(_get_house_urls(next_link["href"]))
+    return urls
 
 def _get_address(soup):
     postal_code_field = soup.find(attrs={"itemprop": "postalCode"})
@@ -39,31 +55,19 @@ def _get_house(url):
     data["plot_area"] = _get_number_attribute(content, r"Grundst.ck")
     return data
 
-def _get_houses(search_url):
-    base_url = "http://www.kalaydo.de"
-    url = base_url + search_url
-    try:
-        soup = BeautifulSoup(urllib2.urlopen(url).read())
-    except urllib2.HTTPError as e:
-        if e.code == 509:
-            print "Ignoring HTTP 509 for: " + url
-            return []
-    items = soup.find(id="resultlist").findAll("li", recursive=False)
+def _get_houses(urls):
     houses = []
-    for item in items:
-        link = item.find("a", href=re.compile(r"^/immobilien/"))
-        target = base_url + link["href"]
+    for url in urls:
         try:
-            data = _get_house(target)
+            house = _get_house(url)
         except urllib2.HTTPError as e:
-            print "Ignoring HTTP 509 for: " + target
-            continue
-        data["url"] = target
-        houses.append(data)
-    next_link = soup.find("a", attrs={"class": "next"})
-    if next_link:
-        houses.extend(_get_houses(next_link["href"]))
+            message = "Failed to fetch %s, HTTP error %d." % (url, e.code)
+            print >>sys.stderr, message
+            house = {}
+        house["url"] = url
+        houses.append(house)
     return houses
 
 def get_houses(search_url):
-    return _get_houses(search_url)
+    urls = _get_house_urls(search_url)
+    return _get_houses(urls)

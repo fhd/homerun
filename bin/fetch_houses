@@ -12,7 +12,14 @@ if __name__ == "__main__":
     if len(houses) == 0:
         sys.exit(1)
     anything_new = False
-    for house in houses:
+    for house in list(houses):
+        if house.keys() == ["url"]:
+            houses.remove(house)
+            for stored_house in stored_houses:
+                if stored_house["url"] == house["url"]:
+                    stored_house.pop("new", None)
+                    houses.append(stored_house)
+            continue
         if not house_utils.contains(stored_houses, house):
             house["new"] = True
             anything_new = True
