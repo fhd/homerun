@@ -14,8 +14,8 @@ if __name__ == "__main__":
     anything_new = False
     for house in houses:
         if not house_utils.contains(stored_houses, house):
-	   house["new"] = True
-           anything_new = True
+            house["new"] = True
+            anything_new = True
     storage.save_houses(houses)
     if not anything_new:
         sys.exit(2)
