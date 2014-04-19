@@ -1,5 +1,6 @@
 import re
 import sys
+import time
 import urllib2
 from BeautifulSoup import BeautifulSoup
 
@@ -57,7 +58,9 @@ def _get_house(url):
 
 def _get_houses(urls):
     houses = []
-    for url in urls:
+    for index, url in enumerate(urls):
+        if index > 0 and index % 50 == 0:
+            time.sleep(300)
         try:
             house = _get_house(url)
         except urllib2.HTTPError as e:
