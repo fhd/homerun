@@ -1,5 +1,5 @@
-import sys
 import re
+import sys
 import urllib2
 from BeautifulSoup import BeautifulSoup
 
