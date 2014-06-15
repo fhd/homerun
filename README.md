@@ -1,7 +1,7 @@
 Homerun
 =======
 
-Crawls real estate sites to find houses for sale.
+Crawls real estate sites to find houses for sale and rent.
 
 This is what I use to keep an eye on new houses appearing on all the
 relevant real estate sites (for me that's only German ones). Changing
@@ -41,6 +41,6 @@ New houses have the `new` property set to `true`.
 Printing houses
 ---------------
 
-This prints all the houses from _houses.json_, sorted by price:
+This prints all the houses from _houses.json_, sorted by price/rent:
 
     bin/print_houses

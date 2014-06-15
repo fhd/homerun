@@ -20,6 +20,7 @@ def _get_house(url):
     data["title"] = soup.find(id="expose-title").string
     data["address"] = _get_address(soup)
     data["price"] = _get_number_attribute(soup, "is24qa-kaufpreis")
+    data["rent"] = _get_number_attribute(soup, "is24qa-kaltmiete")
     data["rooms"] = _get_number_attribute(soup, "is24qa-zimmer")
     data["living_area"] = _get_number_attribute(soup, "is24qa-wohnflaeche-ca")
     data["plot_area"] = _get_number_attribute(soup,

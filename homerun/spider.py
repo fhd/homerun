@@ -15,7 +15,8 @@ def get_houses():
         return []
     spiders = json.loads(open(spiders_file).read())
     houses = []
-    for name in spiders.keys():
-        houses.extend(_get_houses(name, spiders[name]))
+    for spider in spiders:
+        name, search_url = spider.items()[0]
+        houses.extend(_get_houses(name, search_url))
     houses = house_utils.filter_duplicates(houses)
     return houses

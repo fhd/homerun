@@ -51,6 +51,7 @@ def _get_house(url):
     data["title"] = soup.find("h1").string
     data["address"] = _get_address(soup)
     data["price"] = _get_number_attribute(content, "Kaufpreis")
+    data["rent"] = _get_number_attribute(content, "Kaltmiete")
     data["rooms"] = _get_number_attribute(content, "Zimmer")
     data["living_area"] = _get_number_attribute(content, r"Wohnfl.che")
     data["plot_area"] = _get_number_attribute(content, r"Grundst.ck")
